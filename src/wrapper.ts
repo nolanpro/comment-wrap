@@ -1,11 +1,12 @@
 export class Wrapper {
   prefix_regex = /\s.*[#]\s{0,1}/;
-  last_word_regex = /.*\s(\S+.*)$/;
   prefix = "";
+  last_word_regex;
   limit = 0;
 
   constructor(limit: number) {
     this.limit = limit;
+    this.last_word_regex = /.*\s(\S+.*)$/;
   }
 
   wrap(
@@ -19,11 +20,9 @@ export class Wrapper {
     let new_cursor_y = cursor_y;
     let lines = text.split("\n");
 
-    console.log("# LINES", lines.length)
-
     lines.forEach((line, index) => {
       if (index == 0) {
-        // handle the prefix
+        // Handle the prefix. Only do this on the first line.
         let prefix_match = line.match(this.prefix_regex);
         if (prefix_match) {
           this.prefix = prefix_match[0];
@@ -39,7 +38,7 @@ export class Wrapper {
 
       if (wrapResult) {
         if (index == 0) {
-          // handle the cursor
+          // Handle the cursor. Only needed on the first line.
           new_cursor_x = wrapResult.cx;
           new_cursor_y = wrapResult.cy;
         }
@@ -47,14 +46,14 @@ export class Wrapper {
         result.push(wrapResult.cl);
 
         if (lines.length == index + 1) {
-          // final line
+          // Final line
           result.push(wrapResult.nl);
         } else {
           lines[index+1] = wrapResult.nl;
         }
 
       } else {
-        // no changes
+        // No changes
         result.push(line);
       }
     });
@@ -73,16 +72,23 @@ export class Wrapper {
     let new_cursor_y = cursor_y;
 
     if (current_line.length > this.limit) {
-      // get last word of line
-      let last_word = current_line.match(this.last_word_regex)[1];
+      // Move text after the limit to the next line
+      let current_line_first_part =
+        current_line.substring(0, this.limit);
+      let current_line_second_part =
+        current_line.substring(this.limit, current_line.length);
+
+      // Get last full word after it's been split
+      let last_word = current_line_first_part.match(this.last_word_regex)[1];
 
       if (last_word.length >= this.limit) {
-        // German or Hawaiian word?
         return null;
       }
 
-      let new_current_line = current_line.substring(0, current_line.length - last_word.length);
-      let new_next_line = this.prefix + last_word;
+      let last_portion = last_word + current_line_second_part;
+
+      let new_current_line = current_line.substring(0, current_line.length - last_portion.length);
+      let new_next_line = this.prefix + last_portion;
       if (next_line) {
         new_next_line = new_next_line.concat(
           next_line.substring(this.prefix.length)

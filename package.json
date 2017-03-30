@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build:live",
-    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./index.ts"
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./www.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,12 @@
   "devDependencies": {
     "@types/node": "^7.0.12",
     "nodemon": "^1.11.0",
+    "ts-loader": "^2.0.3",
     "ts-node": "^3.0.2",
     "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "pug": "^2.0.0-beta11"
   }
 }
