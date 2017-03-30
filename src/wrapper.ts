@@ -19,6 +19,8 @@ export class Wrapper {
     let new_cursor_y = cursor_y;
     let lines = text.split("\n");
 
+    console.log("# LINES", lines.length)
+
     lines.forEach((line, index) => {
       if (index == 0) {
         // handle the prefix
@@ -43,7 +45,13 @@ export class Wrapper {
         }
 
         result.push(wrapResult.cl);
-        lines[index+1] = wrapResult.nl;
+
+        if (lines.length == index + 1) {
+          // final line
+          result.push(wrapResult.nl);
+        } else {
+          lines[index+1] = wrapResult.nl;
+        }
 
       } else {
         // no changes
@@ -74,18 +82,18 @@ export class Wrapper {
       }
 
       let new_current_line = current_line.substring(0, current_line.length - last_word.length);
-      let new_next_line = this.prefix + last_word + next_line.substring(this.prefix.length);
+      let new_next_line = this.prefix + last_word;
+      if (next_line) {
+        new_next_line = new_next_line.concat(
+          next_line.substring(this.prefix.length)
+        )
+      }
 
       if (cursor_x >= this.limit) {
         // move cursor down with the new next line
         new_cursor_y = cursor_y + 1;
         new_cursor_x = last_word.length + this.prefix.length;
       }
-
-      // REPLACE atom.current_line with new_current_line
-      // REPLACE atom.next_line with new_next_line
-      // SET CURSOR
-      // NOW RE-RUN THIS ON new_next_line (now current_line)
 
       return {
         cl: new_current_line,
