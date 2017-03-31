@@ -1,13 +1,12 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-
+// https://github.com/krausest/ts-webpack-hmr
 module.exports = {
-  entry: {
-    app: ["./dist/index.js"]
-  },
-  output: {
-    publicPath: '/dist/',
-    filename: "bundle.js"
+  entry: "./index.ts",
+  context: __dirname,
+  devServer: {
+    contentBase: [
+      "assets",
+    ],
+    hot: true,
   },
   devtool: 'source-map',
   resolve: {
@@ -20,11 +19,8 @@ module.exports = {
   module: {
     loaders: [
       // all files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'
-      { test: /\.tsx?$/, loader: "ts-loader" },
-      { test: /\.pug$/, loader: "pug-loader" }
+      { test: /\.ts$/, loader: "ts-loader" },
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin()
-  ]
+  plugins: [],
 }

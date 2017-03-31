@@ -14,11 +14,6 @@ console.log(`OLD CURSOR ${cursor_x}, ${cursor_y}`);
 console.log("NEW TEXT", result.text);
 console.log(`NEW CURSOR ${result.cx}, ${result.cy}`);
 
-
-
-
-console.log(this);
-
 export function wrapText() {
   console.log("TRIGGERED WRAPPED TEST!!!!");
 }
