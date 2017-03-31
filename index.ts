@@ -15,6 +15,24 @@ console.log("NEW TEXT", result.text);
 console.log(`NEW CURSOR ${result.cx}, ${result.cy}`);
 
 
+
+
+console.log(this);
+
+export function wrapText() {
+  console.log("TRIGGERED WRAPPED TEST!!!!");
+}
+
+
+// function wrapText() {
+//   console.log("WRAPPING NOW");
+// }
+//
+// $(document).ready(function() {
+//     console.log( "ready!" );
+// });
+//
+
 // REPLACE atom.current_line with new_current_line
 // REPLACE atom.next_line with new_next_line
 // SET CURSOR

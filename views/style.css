@@ -1,0 +1,14 @@
+body {
+  font-family: monospace;
+}
+
+textarea {
+  width: 500px;
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+#output {
+  min-height: 100px;
+  border: 1px solid;
+}

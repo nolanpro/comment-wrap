@@ -1,7 +1,7 @@
 export class Wrapper {
   prefix_regex = /\s.*[#]\s{0,1}/;
   prefix = "";
-  last_word_regex;
+  last_word_regex: RegExp;
   limit = 0;
 
   constructor(limit: number) {
