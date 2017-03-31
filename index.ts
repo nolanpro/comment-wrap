@@ -24,8 +24,20 @@ $(document).ready(function() {
 });
 
 function getInputPositionFromCursorXY(cx: number, cy: number): number {
-  // IDK
-  return 0;
+  let pos = textarea.prop("selectionStart");
+  let text: string = textarea.val();
+  let cx = pos;
+  let cy = 0;
+  let lines = text.split("\n");
+  lines.forEach((line: string, index: number) => {
+    if (cx > line.length) {
+      if (index+1 != lines.length) {
+        cx = cx - line.length - 1;
+        cy++;
+      }
+    }
+  });
+  return { cx: cx, cy: cy }
 }
 
 function getCursorXYFromInput(textarea: JQuery): { cx: number, cy: number } {
