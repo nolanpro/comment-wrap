@@ -79,11 +79,21 @@ export class Wrapper {
         current_line.substring(this.limit, current_line.length);
 
       // Get last full word after it's been split
-      let last_word = current_line_first_part.match(this.last_word_regex)[1];
+      let last_word_match = current_line_first_part.match(this.last_word_regex);
 
-      if (last_word.length >= this.limit) {
-        return null;
+      if (!last_word_match || last_word_match[1].length >= this.limit) {
+        // Word has no spaces. Just break as is.
+        let original_next_line = next_line ? next_line : "";
+        let result = {
+          cl: current_line_first_part,
+          nl: current_line_second_part + original_next_line,
+          cx: new_cursor_x + 1,
+          cy: current_line_second_part.length,
+        };
+        return result;
       }
+
+      let last_word = last_word_match[1];
 
       let last_portion = last_word + current_line_second_part;
 

@@ -8,36 +8,42 @@ let wrapper = new Wrapper(limit);
 
 $(document).ready(function() {
   let textarea = $("#input");
+  textarea.val("-".repeat(limit) + "\n");
+
   let output = $("#output");
-  textarea.keyup(() => {
+  textarea.on('input', () => {
     let text: string = textarea.val();
 
     let pos = getCursorXYFromInput(textarea);
 
     let result = wrapper.wrap(text, pos.cx, pos.cy);
-    output.html(result.text.replace(/\n/g, "<br />"));
+    console.log("RESULT", result);
+    output.html(
+      result.text.replace(/\n/g, "<br/>").replace(/\s/g, '&bull;')
+    );
 
-    let inputPos = getInputPositionFromCursorXY(result.cx, result.cy);
+    let inputPos = getInputPositionFromCursorXY(result.cx, result.cy, textarea);
     let element = <HTMLInputElement>textarea[0];
+    textarea.val(result.text);
     element.setSelectionRange(inputPos, inputPos);
   });
 });
 
-function getInputPositionFromCursorXY(cx: number, cy: number): number {
-  let pos = textarea.prop("selectionStart");
+function getInputPositionFromCursorXY(
+  cx: number, cy: number, textarea: JQuery
+): number {
   let text: string = textarea.val();
-  let cx = pos;
-  let cy = 0;
   let lines = text.split("\n");
+  let pos = 0;
   lines.forEach((line: string, index: number) => {
-    if (cx > line.length) {
-      if (index+1 != lines.length) {
-        cx = cx - line.length - 1;
-        cy++;
-      }
+    if (index == cy) {
+      pos = pos + cx + 1;
+      return;
+    } else {
+      pos = pos + line.length + 1;
     }
   });
-  return { cx: cx, cy: cy }
+  return pos;
 }
 
 function getCursorXYFromInput(textarea: JQuery): { cx: number, cy: number } {
